@@ -17,7 +17,7 @@ from rest_framework import serializers
 # Third Party Library imports
 
 # local imports.
-from boilerplate_app.models import User, Projects
+from accounts.models import User, Projects
 
 
 class UserCreateSerializer(serializers.ModelSerializer):

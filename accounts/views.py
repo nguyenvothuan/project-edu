@@ -16,13 +16,13 @@ from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
 # local imports
-from boilerplate_app.models import User, Projects
-from boilerplate_app.serializers import ( UserCreateSerializer, 
+from accounts.models import User, Projects
+from accounts.serializers import ( UserCreateSerializer, 
                                     UserListSerializer,     
                                     ProjectsCreateSerializer,
                                     ProjectsListSerializer)
-from boilerplate_app.utils import generate_jwt_token
-from boilerplate_app.tasks import add
+from accounts.utils import generate_jwt_token
+from accounts.tasks import add
 
 # Create your views here.
 
