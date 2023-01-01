@@ -54,9 +54,11 @@ class RegistrationAPIView(CreateAPIView):
             if user_serializer.is_valid():
                 user = user_serializer.save()
                 if self.role:
-                    user[self.role] = True
-                    sub_model = self.sub_model_class.objects.create(email=data['email'])
-                    user[self.sub_model_classname] = sub_model
+                    # user[self.role] = True
+                    setattr(user, self.role, True)
+                    sub_model = self.sub_model_class.objects.create(email=request.data['email'])
+                    # user[self.sub_model_classname] = sub_model
+                    setattr(user, self.sub_model_classname, sub_model)
                     sub_model.save()
                 data = generate_jwt_token(user, user_serializer.data)
                 return Response(data, status=status.HTTP_200_OK)

@@ -56,7 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated = AutoDateTimeField(default=timezone.now)
     # if a student account
     is_student = models.BooleanField(default=False)
-    student = models.OneToOneField(Student, on_delete=models.CASCADE, default=None)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE,  null=True,default=None)
     #if an employer account
     
     
