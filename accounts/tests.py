@@ -5,8 +5,8 @@ from django.test import TestCase
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 
 
-from boilerplate_app.models import User
-from boilerplate_app.serializers import UserListSerializer, UserCreateSerializer
+from accounts.models import User
+from accounts.serializers import UserListSerializer, UserCreateSerializer
 
 
 class APITests(TestCase):

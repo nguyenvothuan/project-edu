@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
+from students.models import Student
 
 # Create your models here.
 
@@ -54,7 +54,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=20, default="admin")
     created = models.DateTimeField(default=timezone.now)
     updated = AutoDateTimeField(default=timezone.now)
-
+    # if a student account
+    is_student = models.BooleanField(default=False)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE,  null=True,default=None)
+    #if an employer account
+    
+    
+    
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -85,3 +91,4 @@ class Projects(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+

@@ -5,7 +5,7 @@ import requests
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth import logout  
-
+from django.db import models
 # Rest Framework imports
 from rest_framework import status
 from rest_framework.views import APIView
@@ -16,13 +16,13 @@ from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework_jwt.views import JSONWebTokenAPIView
 
 # local imports
-from boilerplate_app.models import User, Projects
-from boilerplate_app.serializers import ( UserCreateSerializer, 
+from accounts.models import User, Projects
+from accounts.serializers import ( UserCreateSerializer, 
                                     UserListSerializer,     
                                     ProjectsCreateSerializer,
                                     ProjectsListSerializer)
-from boilerplate_app.utils import generate_jwt_token
-from boilerplate_app.tasks import add
+from accounts.utils import generate_jwt_token
+from accounts.tasks import add
 
 # Create your views here.
 
@@ -43,7 +43,9 @@ class TestAppAPIView(APIView):
 
 class RegistrationAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
-
+    role = None
+    sub_model_class: models.Model = None #can be Student or Employer or School or motherfucker anything you want it to be      
+    sub_model_classname = ""
     __doc__ = "Registration API for user"
 
     def post(self, request, *args, **kwargs):
@@ -51,6 +53,12 @@ class RegistrationAPIView(CreateAPIView):
             user_serializer = self.serializer_class(data=request.data)
             if user_serializer.is_valid():
                 user = user_serializer.save()
+                if self.role:
+                    setattr(user, self.role, True)
+                    sub_model = self.sub_model_class.objects.create(email=request.data['email'])
+                    setattr(user, self.sub_model_classname, sub_model)
+                    sub_model.save()
+                    user.save() 
                 data = generate_jwt_token(user, user_serializer.data)
                 return Response(data, status=status.HTTP_200_OK)
             else:
@@ -65,23 +73,31 @@ class RegistrationAPIView(CreateAPIView):
             return Response({'status': False,
                              'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
+            
 
 
 class LoginView(JSONWebTokenAPIView):
+    role = None
+    role_name = ""
     serializer_class = JSONWebTokenSerializer
-    
     __doc__ = "Log In API for user which returns token"
+    role = None
+    def check_role(self, user):
+        if self.role:
+            return getattr(user, self.role)
+        return False
 
-    @staticmethod
-    def post(request):
+    # @staticmethod
+    def post(self, request):
         try:
             serializer = JSONWebTokenSerializer(data=request.data)
             if serializer.is_valid():
                 serialized_data = serializer.validate(request.data)
-                # from custom_logger import DatabaseCustomLogger
-                # d = DatabaseCustomLogger()
-                # d.database_logger(123)
                 user = User.objects.get(email=request.data.get('email'))
+                if self.check_role(user):
+                    return Response({'status': False,
+                                 'message': "Not a %s account" % self.role_name},
+                                status=status.HTTP_400_BAD_REQUEST)
                 return Response({
                     'status': True,
                     'token': serialized_data['token'],

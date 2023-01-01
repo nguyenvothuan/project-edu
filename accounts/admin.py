@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 
-from boilerplate_app.models import User, Projects
+from accounts.models import User, Projects
 
 # Register your models here.
 

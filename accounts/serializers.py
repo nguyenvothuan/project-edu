@@ -17,7 +17,7 @@ from rest_framework import serializers
 # Third Party Library imports
 
 # local imports.
-from boilerplate_app.models import User, Projects
+from accounts.models import User, Projects
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -38,7 +38,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'id', 'password', 'username', 'first_name', 'last_name', 'role')
+        fields = ('email', 'id', 'password', 'username', 'first_name', 'last_name', 'role', 'is_student', 'student')
         extra_kwargs = {'password':{'write_only':True}}
 
 class UserListSerializer(serializers.ModelSerializer):

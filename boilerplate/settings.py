@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'graphene_django',
     'drf_yasg',
-    'boilerplate_app',
+    'accounts',
+    'students'
 ]
 
 MIDDLEWARE = [
@@ -147,7 +148,7 @@ SWAGGER_SETTINGS = {
     }
 }
 
-AUTH_USER_MODEL = 'boilerplate_app.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 
 
