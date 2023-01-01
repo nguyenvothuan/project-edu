@@ -11,3 +11,6 @@ class StudentRegistrationAPIView(RegistrationAPIView):
 class StudentLoginAPIView(LoginView):
     role = 'is_student'
     role_name = 'Student'
+    
+class StudentLogoutAPIView(LogoutView):
+    pass
