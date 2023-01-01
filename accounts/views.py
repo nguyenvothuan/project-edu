@@ -5,7 +5,7 @@ import requests
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth import logout  
-
+from django.db import models
 # Rest Framework imports
 from rest_framework import status
 from rest_framework.views import APIView
@@ -43,7 +43,9 @@ class TestAppAPIView(APIView):
 
 class RegistrationAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
-
+    role = None
+    sub_model_class: models.Model = None #can be Student or Employer or School or motherfucker anything you want it to be      
+    sub_model_classname = ""
     __doc__ = "Registration API for user"
 
     def post(self, request, *args, **kwargs):
@@ -51,6 +53,11 @@ class RegistrationAPIView(CreateAPIView):
             user_serializer = self.serializer_class(data=request.data)
             if user_serializer.is_valid():
                 user = user_serializer.save()
+                if self.role:
+                    user[self.role] = True
+                    sub_model = self.sub_model_class.objects.create(email=data['email'])
+                    user[self.sub_model_classname] = sub_model
+                    sub_model.save()
                 data = generate_jwt_token(user, user_serializer.data)
                 return Response(data, status=status.HTTP_200_OK)
             else:
@@ -65,11 +72,16 @@ class RegistrationAPIView(CreateAPIView):
             return Response({'status': False,
                              'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
+            
 
 
 class LoginView(JSONWebTokenAPIView):
     serializer_class = JSONWebTokenSerializer
-    
+    role = None
+    def check_role(self, user):
+        if self.role:
+            return user[self.role]
+        return False
     __doc__ = "Log In API for user which returns token"
 
     @staticmethod
@@ -82,6 +94,7 @@ class LoginView(JSONWebTokenAPIView):
                 # d = DatabaseCustomLogger()
                 # d.database_logger(123)
                 user = User.objects.get(email=request.data.get('email'))
+                
                 return Response({
                     'status': True,
                     'token': serialized_data['token'],
