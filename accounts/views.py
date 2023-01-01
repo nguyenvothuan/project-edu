@@ -54,12 +54,11 @@ class RegistrationAPIView(CreateAPIView):
             if user_serializer.is_valid():
                 user = user_serializer.save()
                 if self.role:
-                    # user[self.role] = True
                     setattr(user, self.role, True)
                     sub_model = self.sub_model_class.objects.create(email=request.data['email'])
-                    # user[self.sub_model_classname] = sub_model
                     setattr(user, self.sub_model_classname, sub_model)
                     sub_model.save()
+                    user.save() 
                 data = generate_jwt_token(user, user_serializer.data)
                 return Response(data, status=status.HTTP_200_OK)
             else:
@@ -78,25 +77,27 @@ class RegistrationAPIView(CreateAPIView):
 
 
 class LoginView(JSONWebTokenAPIView):
+    role = None
+    role_name = ""
     serializer_class = JSONWebTokenSerializer
+    __doc__ = "Log In API for user which returns token"
     role = None
     def check_role(self, user):
         if self.role:
-            return user[self.role]
+            return getattr(user, self.role)
         return False
-    __doc__ = "Log In API for user which returns token"
 
-    @staticmethod
-    def post(request):
+    # @staticmethod
+    def post(self, request):
         try:
             serializer = JSONWebTokenSerializer(data=request.data)
             if serializer.is_valid():
                 serialized_data = serializer.validate(request.data)
-                # from custom_logger import DatabaseCustomLogger
-                # d = DatabaseCustomLogger()
-                # d.database_logger(123)
                 user = User.objects.get(email=request.data.get('email'))
-                
+                if self.check_role(user):
+                    return Response({'status': False,
+                                 'message': "Not a %s account" % self.role_name},
+                                status=status.HTTP_400_BAD_REQUEST)
                 return Response({
                     'status': True,
                     'token': serialized_data['token'],
