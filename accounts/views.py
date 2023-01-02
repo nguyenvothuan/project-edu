@@ -21,9 +21,8 @@ from accounts.serializers import ( UserCreateSerializer,
                                     UserListSerializer,     
                                     ProjectsCreateSerializer,
                                     ProjectsListSerializer)
-from accounts.utils import generate_jwt_token
+from accounts.utils import generate_jwt_token,get_user_id_from_token
 from accounts.tasks import add
-
 # Create your views here.
 
 
@@ -98,6 +97,8 @@ class LoginView(JSONWebTokenAPIView):
                     return Response({'status': False,
                                  'message': "Not a %s account" % self.role_name},
                                 status=status.HTTP_400_BAD_REQUEST)
+                # print(get_user_id_from_token(serialized_data['token']))
+                # print("baby i m real")  
                 return Response({
                     'status': True,
                     'token': serialized_data['token'],
