@@ -1,5 +1,6 @@
 from accounts.views import RegistrationAPIView, LoginView, LogoutView
 from employers.models import Employer
+
 # Create your views here.
 
 class EmployerRegistrationAPIView(RegistrationAPIView):
@@ -14,3 +15,4 @@ class EmployerLoginAPIView(LoginView):
     
 class EmployerLogoutAPIView(LogoutView):
     pass
+
