@@ -27,6 +27,9 @@ urlpatterns = [
 
     path('api/v1.0/companies/',
          include("companies.urls", namespace="companies-api")),
+    
+    path('api/v1.0/schools/',
+         include("schools.urls", namespace="schools-api")),
 
     path("graphql/", GraphQLView.as_view(graphiql=True)),
     
