@@ -5,5 +5,5 @@ from rest_framework.routers import SimpleRouter
 app_name = 'companies'
 
 router = SimpleRouter()
-router.register("", CompanyViewSet, basename="posts")
+router.register("", CompanyViewSet, basename="companies")
 urlpatterns = router.urls
