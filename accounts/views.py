@@ -143,7 +143,7 @@ class LogoutView(APIView):
 
 class ChangePasswordView(APIView):
     http_method_names = ['put']
-    # authentication_classes = [JWTAuthentication]
+    authentication_classes = [JSONWebTokenAuthentication]
     @swagger_auto_schema(
         operation_description="Change Password API",
         request_body=openapi.Schema(
