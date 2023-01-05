@@ -3,7 +3,6 @@ from django.db import models
 from schools.models import School
 # Create your models here.
 
-
 class Student(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField(_('email address'), unique=True)

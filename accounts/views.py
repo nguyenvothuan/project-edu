@@ -20,8 +20,8 @@ from accounts.models import User, Projects
 from accounts.serializers import ( UserCreateSerializer, 
                                     UserListSerializer,     
                                     ProjectsCreateSerializer,
-                                    ProjectsListSerializer)
-from accounts.utils import generate_jwt_token,get_user_id_from_token
+                                    ProjectsListSerializer )
+from accounts.utils import generate_jwt_token, get_user_id_from_token
 from accounts.tasks import add
 # Create your views here.
 
