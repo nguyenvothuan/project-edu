@@ -18,10 +18,32 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from graphene_django.views import GraphQLView
-
+from boilerplate.swagger import schema_view
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  path('api/v1.0/accounts/',
-                       include("accounts.urls", namespace="accounts-api")),
-                  path("graphql/", GraphQLView.as_view(graphiql=True)),
-              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('admin/', admin.site.urls),
+
+    path('docs/', schema_view.with_ui("swagger",
+         cache_timeout=0), name="schema_view"),
+
+    path('api/accounts/',
+         include("accounts.urls", namespace="accounts-api")),
+
+    path('api/companies/',
+         include("companies.urls", namespace="companies-api")),
+
+    path('api/schools/',
+         include("schools.urls", namespace="schools-api")),
+
+    path('api/jobs/',
+         include("job.urls", namespace="job-api")),
+
+    path("graphql/", GraphQLView.as_view(graphiql=True)),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

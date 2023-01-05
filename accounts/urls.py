@@ -21,11 +21,6 @@ from accounts.views import (
                           LogoutView
                           )
 
-from accounts.swagger import schema_view
-
-
-
-
 app_name = 'accounts'
 
 urlpatterns = [
@@ -37,5 +32,4 @@ urlpatterns = [
     path('project/', ProjectAPIView.as_view(), name='project-api'),
     path('students/', include("students.urls", namespace="accounts-students-api")),
     path('employers/',include("employers.urls", namespace="employers-students-api")),
-    path('docs/', schema_view.with_ui("swagger", cache_timeout=0), name="schema_view"),
 ]

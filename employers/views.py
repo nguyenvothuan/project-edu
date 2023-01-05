@@ -1,7 +1,10 @@
 from accounts.views import RegistrationAPIView, LoginView, LogoutView
 from employers.models import Employer
+from employers.serializers import EmployerSerializer
+from rest_framework.viewsets import ModelViewSet
 # Create your views here.
 
+#Authentication:
 class EmployerRegistrationAPIView(RegistrationAPIView):
     role = 'is_employer'
     sub_model_class = Employer
@@ -14,3 +17,9 @@ class EmployerLoginAPIView(LoginView):
     
 class EmployerLogoutAPIView(LogoutView):
     pass
+
+#CRUD
+
+class EmployerViewSet(ModelViewSet):
+    queryset = Employer.objects.all()
+    serializer_class = EmployerSerializer

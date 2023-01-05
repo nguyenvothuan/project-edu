@@ -1,5 +1,8 @@
 from accounts.views import RegistrationAPIView, LoginView, LogoutView
 from students.models import Student
+from rest_framework.viewsets import ModelViewSet
+from students.serializers import StudentSerializer
+
 # Create your views here.
 
 class StudentRegistrationAPIView(RegistrationAPIView):
@@ -14,3 +17,9 @@ class StudentLoginAPIView(LoginView):
     
 class StudentLogoutAPIView(LogoutView):
     pass
+
+#CRUD
+
+class StudentViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer

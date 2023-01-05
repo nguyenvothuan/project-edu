@@ -40,14 +40,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'graphene_django',
+    'rest_framework_simplejwt',
+    'job',
     'drf_yasg',
     'accounts',
     'students',
     'employers',
+    'companies',
+    'schools',
 ]
 
 MIDDLEWARE = [
-    'log_request_id.middleware.RequestIDMiddleware',
+    # 'log_request_id.middleware.RequestIDMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -111,7 +115,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
     'COERCE_DECIMAL_TO_STRING': False,
@@ -170,13 +175,13 @@ LOGGING = {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
-        'request_id': {
-            '()': 'log_request_id.filters.RequestIDFilter'
-        }
+        # 'request_id': {
+        #     '()': 'log_request_id.filters.RequestIDFilter'
+        # }
     },
     'formatters': {
         'standard': {
-            'format': '%(request_id)s [%(message)s] %(asctime)s',
+            # 'format': '%(request_id)s [%(message)s] %(asctime)s',
             'datefmt': '%d-%m-%Y %H:%M:%S'
         }
     },
@@ -188,7 +193,7 @@ LOGGING = {
             'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
-            'filters': ['request_id'],
+            # 'filters': ['request_id'],
         },
 
         'console': {
