@@ -13,23 +13,21 @@ from django.urls import path,include
 
 # local imports.
 from accounts.views import (
-                          TestAppAPIView, 
-                          UserAPIView, 
-                          ProjectAPIView, 
                           RegistrationAPIView,
+                          UserAPIView,
                           LoginView,
-                          LogoutView
+                          LogoutView,
+                          ChangePasswordView,
                           )
 
 app_name = 'accounts'
 
 urlpatterns = [
-    path('test/', TestAppAPIView.as_view(), name='accounts'),
     path('register/', RegistrationAPIView.as_view(), name='register-api'),
     path('login/', LoginView.as_view(), name='login-api'),
     path('logout/', LogoutView.as_view(), name='logout-api'),
+    path('change-password/', ChangePasswordView.as_view(), name='change-password-api'),
     path('list/users/', UserAPIView.as_view(), name='user-api'),
-    path('project/', ProjectAPIView.as_view(), name='project-api'),
     path('students/', include("students.urls", namespace="accounts-students-api")),
     path('employers/',include("employers.urls", namespace="employers-students-api")),
 ]

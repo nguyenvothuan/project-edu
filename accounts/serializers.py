@@ -58,9 +58,13 @@ class ProjectsCreateSerializer(serializers.ModelSerializer):
         user = User.objects.get(pk=validated_data.pop('user'))
         return Projects.objects.create(**validated_data,user=user)
 
-
 class ProjectsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Projects
         fields = ('id', 'project_name', 'user')
+        
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    
