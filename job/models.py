@@ -1,6 +1,9 @@
 # Create your models here.
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import get_user_model
+
+Student = get_user_model()
 
 # Create your models here.
 
@@ -32,3 +35,13 @@ class Job(models.Model):
 
     def __str__(self):
         return self.title
+
+class Applicant(models.Model):
+
+    user = models.ForeignKey(Student, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True, auto_now_add=False)
+
+
+    def __str__(self):
+        return self.job.title
