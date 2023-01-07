@@ -10,7 +10,7 @@ class IsVerified(permissions.BasePermission):
         # Check if the user is authenticated and verified
         if not request.user.is_authenticated:
             return False
-        verified_users = VerifiedAdvisor.objects.filter(user=request.user, is_verified=True)
+        verified_users = Advisor.objects.filter(user=request.user, is_verified=True)
         return verified_users.exists()
 
 #Authentication:
