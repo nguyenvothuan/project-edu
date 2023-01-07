@@ -1,5 +1,5 @@
 from accounts.views import RegistrationAPIView, LoginView, LogoutView
-from .models import Advisor
+from .models import Advisor, VerifiedAdvisor
 from .serializers import AdvisorSerializer
 from rest_framework.viewsets import ModelViewSet
 # Create your views here.
@@ -10,7 +10,7 @@ class IsVerified(permissions.BasePermission):
         # Check if the user is authenticated and verified
         if not request.user.is_authenticated:
             return False
-        verified_users = Advisor.objects.filter(user=request.user, is_verified=True)
+        verified_users = VerifiedAdvisor.objects.filter(user=request.user, is_verified=True)
         return verified_users.exists()
 
 #Authentication:
