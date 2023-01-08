@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+# jwt
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework_jwt.views import JSONWebTokenAPIView
 

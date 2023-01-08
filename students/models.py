@@ -9,4 +9,3 @@ class Student(models.Model):
     email = models.EmailField(_('email address'), unique=True)
     school = models.ForeignKey(School, on_delete=models.SET_NULL, null=True)
     
-  
