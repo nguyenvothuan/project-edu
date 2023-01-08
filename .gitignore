@@ -107,3 +107,5 @@ db.sqlite3
 
 # IDEA
 .idea/
+
+boilerplate/.env

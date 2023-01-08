@@ -17,6 +17,7 @@ crud_router.register('', JobViewSet, basename="job")
 app_name = 'Job'
 
 urlpatterns = [
+    path('home/', views.home_view, name='home'),
     path('', include(crud_router.urls))
     # path('jobs/', views.job_list_View, name='job-list'),
     # path('job/create/', views.create_job_View, name='create-job'),
