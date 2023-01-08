@@ -10,6 +10,7 @@ import calendar
 
 # Django imports.
 from django.db import transaction
+from django.contrib.auth import get_user_model, authenticate
 
 # Rest Framework imports.
 from rest_framework import serializers
@@ -18,6 +19,7 @@ from rest_framework import serializers
 
 # local imports.
 from accounts.models import User, Projects
+
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -47,7 +49,15 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'first_name', 'last_name', 'email', 'role')
 
-
+class UserLoginSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+        
+        
 class ProjectsCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -58,9 +68,13 @@ class ProjectsCreateSerializer(serializers.ModelSerializer):
         user = User.objects.get(pk=validated_data.pop('user'))
         return Projects.objects.create(**validated_data,user=user)
 
-
 class ProjectsListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Projects
         fields = ('id', 'project_name', 'user')
+        
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    

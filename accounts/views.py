@@ -4,7 +4,7 @@ import requests
 # Django imports
 from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.contrib.auth import logout  
+from django.contrib.auth import logout, get_user_model, authenticate
 from django.db import models
 # Rest Framework imports
 from rest_framework import status
@@ -15,14 +15,22 @@ from rest_framework.permissions import IsAuthenticated
 # jwt
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework_jwt.views import JSONWebTokenAPIView
-
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+# simplejwt
+from rest_framework_simplejwt.tokens import AccessToken
+# swagger
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 # local imports
 from accounts.models import User, Projects
-from accounts.serializers import ( UserCreateSerializer, 
-                                    UserListSerializer,     
-                                    ProjectsCreateSerializer,
-                                    ProjectsListSerializer )
-from accounts.utils import generate_jwt_token, get_user_id_from_token
+
+from accounts.serializers import (UserCreateSerializer,
+                                  UserListSerializer,
+                                  ProjectsCreateSerializer,
+                                  ProjectsListSerializer,
+                                  ChangePasswordSerializer,
+                                  UserLoginSerializer)
+from accounts.utils import generate_jwt_token, get_user_id_from_token, get_user
 from accounts.tasks import add
 # Create your views here.
 
@@ -44,7 +52,8 @@ class TestAppAPIView(APIView):
 class RegistrationAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
     role = None
-    sub_model_class: models.Model = None #can be Student or Employer or School or motherfucker anything you want it to be      
+    # can be Student or Employer or School or motherfucker anything you want it to be
+    sub_model_class: models.Model = None
     sub_model_classname = ""
     __doc__ = "Registration API for user"
 
@@ -55,10 +64,11 @@ class RegistrationAPIView(CreateAPIView):
                 user = user_serializer.save()
                 if self.role:
                     setattr(user, self.role, True)
-                    sub_model = self.sub_model_class.objects.create(email=request.data['email'])
+                    sub_model = self.sub_model_class.objects.create(
+                        email=request.data['email'])
                     setattr(user, self.sub_model_classname, sub_model)
                     sub_model.save()
-                    user.save() 
+                    user.save()
                 data = generate_jwt_token(user, user_serializer.data)
                 return Response(data, status=status.HTTP_200_OK)
             else:
@@ -73,15 +83,15 @@ class RegistrationAPIView(CreateAPIView):
             return Response({'status': False,
                              'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
-            
 
 
-class LoginView(JSONWebTokenAPIView):
+class LoginView(CreateAPIView):
     role = None
     role_name = ""
-    serializer_class = JSONWebTokenSerializer
+    serializer_class = UserLoginSerializer
     __doc__ = "Log In API for user which returns token"
     role = None
+
     def check_role(self, user):
         if self.role:
             return getattr(user, self.role)
@@ -90,27 +100,19 @@ class LoginView(JSONWebTokenAPIView):
     # @staticmethod
     def post(self, request):
         try:
-            serializer = JSONWebTokenSerializer(data=request.data)
-            if serializer.is_valid():
-                serialized_data = serializer.validate(request.data)
-                user = User.objects.get(email=request.data.get('email'))
-                if self.check_role(user):
-                    return Response({'status': False,
-                                 'message': "Not a %s account" % self.role_name},
-                                status=status.HTTP_400_BAD_REQUEST)
-                # print(get_user_id_from_token(serialized_data['token']))
-                # print("baby i m real")  
+            email = request.data.get('email')
+            password = request.data.get('password')
+            user = authenticate(email=email, password=password)
+            if user is not None:
+                access = AccessToken.for_user(user)
                 return Response({
                     'status': True,
-                    'token': serialized_data['token'],
+                    'token': str(access),
                 }, status=status.HTTP_200_OK)
             else:
                 message = ''
-                for error in serializer.errors.values():
-                    message += " "
-                    message += error[0]
                 return Response({'status': False,
-                                 'message': message},
+                                 'message': "User doesn't exist"},
                                 status=status.HTTP_400_BAD_REQUEST)
         except (AttributeError, ObjectDoesNotExist):
             return Response({'status': False,
@@ -119,7 +121,7 @@ class LoginView(JSONWebTokenAPIView):
 
 
 class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     @staticmethod
     def post(request):
@@ -128,6 +130,8 @@ class LogoutView(APIView):
         """
         try:
             user = request.user
+            print(user)
+            print(get_user(request.headers['Authorization']))
             logout(request)
             return Response({'status': True,
                              'message': "logout successfully"},
@@ -135,6 +139,41 @@ class LogoutView(APIView):
         except (AttributeError, ObjectDoesNotExist):
             return Response({'status': False},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class ChangePasswordView(APIView):
+    http_method_names = ['put']
+    authentication_classes = [JSONWebTokenAuthentication]
+
+    @swagger_auto_schema(
+        operation_description="Change Password API",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'old_password': openapi.Schema(type=openapi.TYPE_STRING),
+                'new_password': openapi.Schema(type=openapi.TYPE_STRING)
+            },
+            required=['old_password', 'new_password']
+        ),
+        responses={
+            200: openapi.Response('Success', openapi.Schema(type=openapi.TYPE_OBJECT)),
+            400: openapi.Response('Bad request', openapi.Schema(type=openapi.TYPE_OBJECT)),
+        }
+    )
+    def put(self, request, *args, **kwargs):
+        serializer = ChangePasswordSerializer(data=request.data)
+        print(request.user)
+        print(request.headers)
+        print(get_user_id_from_token(request.headers['Authorization']))
+        if serializer.is_valid():
+            # Check old password
+            if not request.user.check_password(serializer.data.get('old_password')):
+                return Response({'old_password': ['Wrong password']}, status=status.HTTP_400_BAD_REQUEST)
+            # set new password:
+            request.user.set_password(serializer.data.get('new_password'))
+            request.user.save()
+            return Response({"status": "success"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserAPIView(GenericAPIView):
@@ -178,7 +217,6 @@ class ProjectAPIView(GenericAPIView):
             return Response({'status': False, 'message': str(e)},
                             status=status.HTTP_400_BAD_REQUEST)
 
-
     def post(self, request, format=None):
         """
         Create a project
@@ -190,9 +228,9 @@ class ProjectAPIView(GenericAPIView):
             if serializer.is_valid():
                 project = serializer.create(serializer.data)
                 return Response({'status': True,
-                        'project': project.id,
-                        'message': "Project Added Successfully"},
-                        status=status.HTTP_200_OK)
+                                 'project': project.id,
+                                 'message': "Project Added Successfully"},
+                                status=status.HTTP_200_OK)
             else:
                 message = ''
                 for error in serializer.errors.values():
