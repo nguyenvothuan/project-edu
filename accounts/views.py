@@ -12,10 +12,6 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-# jwt
-from rest_framework_jwt.serializers import JSONWebTokenSerializer
-from rest_framework_jwt.views import JSONWebTokenAPIView
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 # simplejwt
 from rest_framework_simplejwt.tokens import AccessToken
 # swagger
@@ -143,9 +139,8 @@ class LogoutView(APIView):
 
 class ChangePasswordView(APIView):
     http_method_names = ['put']
-    authentication_classes = [JSONWebTokenAuthentication]
-
     @swagger_auto_schema(
+        security=[{'Bearer': []}],
         operation_description="Change Password API",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -158,13 +153,14 @@ class ChangePasswordView(APIView):
         responses={
             200: openapi.Response('Success', openapi.Schema(type=openapi.TYPE_OBJECT)),
             400: openapi.Response('Bad request', openapi.Schema(type=openapi.TYPE_OBJECT)),
-        }
+        },
+        
     )
     def put(self, request, *args, **kwargs):
         serializer = ChangePasswordSerializer(data=request.data)
         print(request.user)
         print(request.headers)
-        print(get_user_id_from_token(request.headers['Authorization']))
+        print(request.headers['Authorization'])
         if serializer.is_valid():
             # Check old password
             if not request.user.check_password(serializer.data.get('old_password')):

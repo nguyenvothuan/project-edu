@@ -21,7 +21,8 @@ def validate_access_token(access_token):
         return False
     
 def get_user_id_from_token(access_token: str):
-    return get_user(access_token)['id']
+    return get_user(access_token)['user_id']
 
 def get_user(access_token: str):
     return AccessToken(access_token)
+
