@@ -26,7 +26,7 @@ from accounts.serializers import (UserCreateSerializer,
                                   ProjectsListSerializer,
                                   ChangePasswordSerializer,
                                   UserLoginSerializer)
-from accounts.utils import generate_jwt_token, get_user_id_from_token, get_user
+from accounts.utils import generate_jwt_token, get_user, get_user_from_header
 from accounts.tasks import add
 # Create your views here.
 
@@ -125,8 +125,9 @@ class LogoutView(APIView):
         try:
             user = request.user
             print(user)
-            print(get_user(request.headers['Authorization']))
-            logout(request) #doesn't really delete the accesstoken from the server but rather remove it from client's request header.
+            print(get_user_from_header(request.headers))
+            # doesn't really delete the accesstoken from the server but rather remove it from client's request header.
+            logout(request)
             return Response({'status': True,
                              'message': "logout successfully"},
                             status=status.HTTP_200_OK)
@@ -137,6 +138,7 @@ class LogoutView(APIView):
 
 class ChangePasswordView(APIView):
     http_method_names = ['put']
+
     @swagger_auto_schema(
         security=[{'Bearer': []}],
         operation_description="Change Password API",
@@ -152,13 +154,11 @@ class ChangePasswordView(APIView):
             200: openapi.Response('Success', openapi.Schema(type=openapi.TYPE_OBJECT)),
             400: openapi.Response('Bad request', openapi.Schema(type=openapi.TYPE_OBJECT)),
         },
-        
+
     )
-    def put(self, request, *args, **kwargs):
+    def put(self,  request, *args, **kwargs):
         serializer = ChangePasswordSerializer(data=request.data)
-        print(request.user)
-        print(request.headers)
-        print(request.headers['Authorization'])
+        print(get_user_from_header(request.headers))
         if serializer.is_valid():
             # Check old password
             if not request.user.check_password(serializer.data.get('old_password')):
