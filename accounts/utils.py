@@ -1,21 +1,19 @@
-from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.utils import jwt_decode_handler
 from rest_framework_simplejwt.tokens import AccessToken
 
 
 def generate_jwt_token(user, data):
-    # jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
-    # jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
-    # payload = jwt_payload_handler(user)
-    # token = jwt_encode_handler(payload)
-    # data['token'] = token
-    
     data['token'] = str(AccessToken.for_user(user))
     return data
 
+
 def validate_access_token(access_token):
+    """
+    Deprecated: This function is no longer supported and should not be used.
+    Instead, re-implement this using simplejwt.
+    """
     try:
-        token = jwt_decode_handler(access_token)
+        _ = jwt_decode_handler(access_token)
         return True
     except Exception:
         return False
