@@ -1,8 +1,6 @@
 from rest_framework_jwt.utils import jwt_decode_handler
 from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import Token
-from accounts.models import User
 
 
 def generate_jwt_token(user, data):
