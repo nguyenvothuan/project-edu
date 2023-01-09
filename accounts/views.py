@@ -117,8 +117,6 @@ class LoginView(CreateAPIView):
 
 
 class LogoutView(APIView):
-    # permission_classes = (IsAuthenticated,)
-
     @staticmethod
     def post(request):
         """
@@ -128,7 +126,7 @@ class LogoutView(APIView):
             user = request.user
             print(user)
             print(get_user(request.headers['Authorization']))
-            logout(request)
+            logout(request) #doesn't really delete the accesstoken from the server but rather remove it from client's request header.
             return Response({'status': True,
                              'message': "logout successfully"},
                             status=status.HTTP_200_OK)
