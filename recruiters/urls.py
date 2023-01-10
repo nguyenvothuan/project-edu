@@ -13,13 +13,13 @@ from rest_framework.routers import SimpleRouter
 
 app_name = 'students'
 crud_router = SimpleRouter()
-crud_router.register('', recruiterViewSet, basename="recruiters")
+crud_router.register('', RecruiterViewSet, basename="recruiters")
 urlpatterns = [
     # authen
-    path('register/', recruiterRegistrationAPIView.as_view(),
+    path('register/', RecruiterRegistrationAPIView.as_view(),
          name='recruiter-register-api'),
-    path('login/', recruiterLoginAPIView.as_view(), name='recruiter-login-api'),
-    path('logout/', recruiterLogoutAPIView.as_view(), name='recruiter-logout-api'),
+    path('login/', RecruiterLoginAPIView.as_view(), name='recruiter-login-api'),
+    path('logout/', RecruiterLogoutAPIView.as_view(), name='recruiter-logout-api'),
     # crud
     path('', include(crud_router.urls)),
 ]

@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from rest_framework import serializers
-from recruiters.models import recruiter
+from recruiters.models import Recruiter
 # Create your views here.
 
-class recruiterSerializer(serializers.ModelSerializer):
+class RecruiterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = recruiter
+        model = Recruiter
         fields = ('id', 'name', 'company')
         
 
