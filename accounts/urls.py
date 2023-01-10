@@ -29,5 +29,5 @@ urlpatterns = [
     path('change-password/', ChangePasswordView.as_view(), name='change-password-api'),
     path('list/users/', UserAPIView.as_view(), name='user-api'),
     path('students/', include("students.urls", namespace="accounts-students-api")),
-    path('employers/',include("employers.urls", namespace="employers-students-api")),
+    path('recruiters/',include("recruiters.urls", namespace="recruiters-students-api")),
 ]

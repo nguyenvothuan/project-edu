@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from employers.models import Employer
+from recruiters.models import recruiter
 from students.models import Student
 from advisors.models import Advisor
 
@@ -59,10 +59,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     # if a student account
     is_student = models.BooleanField(default=False)
     student = models.OneToOneField(Student, on_delete=models.CASCADE,  null=True,default=None)
-    #if an employer account
-    is_employer = models.BooleanField(default=False)
-    employer = models.OneToOneField(Employer, on_delete=models.CASCADE, null=True, default=None)
-    #if an employer account
+    #if an recruiter account
+    is_recruiter = models.BooleanField(default=False)
+    recruiter = models.OneToOneField(recruiter, on_delete=models.CASCADE, null=True, default=None)
+    #if an recruiter account
     is_advisor = models.BooleanField(default=False)
     advisor = models.OneToOneField(Advisor, on_delete=models.CASCADE, null=True, default=None)
     

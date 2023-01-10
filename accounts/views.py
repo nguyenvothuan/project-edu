@@ -48,7 +48,7 @@ class TestAppAPIView(APIView):
 class RegistrationAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
     role = None
-    # can be Student or Employer or School or motherfucker anything you want it to be
+    # can be Student or recruiter or School or motherfucker anything you want it to be
     sub_model_class: models.Model = None
     sub_model_classname = ""
     __doc__ = "Registration API for user"

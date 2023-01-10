@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'advisors',
     'accounts',
     'students',
-    'employers',
+    'recruiters',
     'companies',
     'schools',
     

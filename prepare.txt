@@ -1,0 +1,10 @@
+python manage.py makemigrations 
+python manage.py makemigrations accounts
+python manage.py makemigrations students
+python manage.py makemigrations advisors
+python manage.py makemigrations recruiters
+python manage.py makemigrations companies
+python manage.py makemigrations job
+python manage.py makemigrations recruiters
+python manage.py makemigrations schools
+python manage.py migrate
