@@ -38,6 +38,7 @@ CORS_ALLOWED_ORIGINS = [
     
     # TODO: add cors allowed origin for the frontend. Currently, only allow the server to call itself.
     "http://localhost:8000",
+    "http://127.0.0.1:8000",
 ]
 
 # Application definition
