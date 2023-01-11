@@ -6,4 +6,4 @@ class Company(models.Model):
     industry = models.CharField(max_length=255)
     description = models.TextField(max_length=10000) 
     # stored the students who are following this companies
-    followers = models.ManyToManyField(Student, through='Follow', related_name='following_companies') 
+    # followers = models.ManyToManyField(Student, through='Follow', related_name='following_companies') 

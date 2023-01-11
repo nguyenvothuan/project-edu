@@ -5,5 +5,5 @@ from companies.models import Company
 class Follow(models.Model):
     date_followed = models.DateTimeField(auto_now_add=True)
     # delete follow if one of the student or company is deleted.
-    student = models.ForeignObject(Student, on_delete=models.CASCADE)
-    company = models.ForeignObject(Company, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
