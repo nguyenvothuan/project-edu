@@ -3,23 +3,8 @@
 ## Project Edu
 
 Production ready django based starter kit application.
-
-With collaborative efforts from the CTO office, we have prepared this Django Boilerplate. This boilerplate is aimed to be generic in a way that it solves most of the common problems that are faced in development process, specific to Python-Django development. Moreover it also has the best practices followed in web app development catering the microservice architecture.
-
-## Technology
-
- - Django 3
- - Django Rest Framework 
- - Fully Dockerised Setup (configuration driven)
- - Smart Logging (DB, Requests)
- - Elastic Solutions    (FileBeat, MetricBeat and HeartBeat) 
- - Celery
- - Rabbit MQ
- - JWT
- - Unit tests
- - Swagger
  
- ## Description
+ ## Technology:
  - ***Django*** :- We have opted for Django, as we wanted to have a strong
    framework and complete ORM solution since we are planning to go with
    Python and with SQL based database
@@ -55,17 +40,6 @@ With collaborative efforts from the CTO office, we have prepared this Django Boi
    publishing. We selected swagger, so that APIs can be published and be
    tested externally.
 
-## Application Structure
-
-```
-|____boilerplate
-| |____config
-|____boilerplate_app
-| |____migrations
-|____compose
-|____publisher_subscriber
-|____requirements
-```
 ## Running the server locally
 
  * Clone this repo
@@ -89,9 +63,6 @@ Docker Setup
 
 > docker-compose up
  * To check the server, open `http://localhost:8000/`
-
-## Contributors
-Rishabh Shah
 
 ## License
 
