@@ -9,17 +9,18 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('schools', '0001_initial'),
+        ('students', '0001_initial'),
+        ('companies', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Student',
+            name='Follow',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('email', models.EmailField(max_length=254, unique=True, verbose_name='email address')),
-                ('school', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='schools.school')),
+                ('date_followed', models.DateTimeField(auto_now_add=True)),
+                ('company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='companies.company')),
+                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='students.student')),
             ],
         ),
     ]
