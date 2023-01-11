@@ -32,35 +32,46 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [
+    # TODO: Move allowed origin, secret keys, database host, port, etc. to environment variables 
+    # (instead of directly setting in this file) for easy configuring the project in other environments.
+    
+    # TODO: add cors allowed origin for the frontend. Currently, only allow the server to call itself.
+    "http://localhost:8000",
+]
 
 # Application definition
 
+# Keep this list ordered alphabetically.
 INSTALLED_APPS = [
+    'ckeditor',
+    'coreapi',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'graphene_django',
-    'rest_framework_simplejwt',
     'drf_yasg',
-    'ckeditor',
-    'coreapi',
+    'graphene_django',
+    'rest_framework',
+    'rest_framework_simplejwt',
     # Apps
-    'job',
-    'advisors',
     'accounts',
+    'advisors',
+    'companies',
+    'job',
+    'schools',
     'students',
     'recruiters',
-    'companies',
-    'schools',
-    
 ]
 
 MIDDLEWARE = [
     # 'log_request_id.middleware.RequestIDMiddleware',
+    # Keep CORS middleware near the top as possible to apply it early and allow header manipulation
+    # Check out https://github.com/adamchainz/django-cors-headers#setup
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
