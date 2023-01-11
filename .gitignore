@@ -109,3 +109,6 @@ db.sqlite3
 .idea/
 
 boilerplate/.env
+
+# Command alias
+**/Makefile
