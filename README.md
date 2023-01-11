@@ -1,8 +1,34 @@
 ![enter image description here](https://lh3.googleusercontent.com/cPYomSHND0D4kDuU1qHKcv8NsaC9E1BFEljalnVwB8DCxIYSj_Wozs39C9V55nAFHaodQX_nEzs)
 
 ## Project Edu
+## Running the server locally
 
-Production ready django based starter kit application.
+ * Clone this repo
+ * Install python3.10
+ * Install virtual env:
+> python3 -m venv venv
+ * Activate virtual env:
+> source venv/bin/activate
+ * Intall dependencies:
+> pip install -r requirements.txt
+ * Run the server:
+> python manage.py runserver
+-----
+Docker Setup
+---
+ * Install [docker compose](https://docs.docker.com/compose/install/)
+ * Run docker:
+> Create master_app.log file inside root directory
+
+> docker-compose build
+
+> docker-compose up
+ * To check the server, open `http://localhost:8000/`
+
+## License
+
+This project is licensed under the terms of the MIT license.
+
  
  ## Technology:
  - ***Django*** :- We have opted for Django, as we wanted to have a strong
@@ -39,32 +65,3 @@ Production ready django based starter kit application.
    via Django REST Framework, but that is limited in some ways like
    publishing. We selected swagger, so that APIs can be published and be
    tested externally.
-
-## Running the server locally
-
- * Clone this repo
- * Install python3.10
- * Install virtual env:
-> python3 -m venv venv
- * Activate virtual env:
-> source venv/bin/activate
- * Intall dependencies:
-> pip install -r requirements.txt
- * Run the server:
-> python manage.py runserver
------
-Docker Setup
----
- * Install [docker compose](https://docs.docker.com/compose/install/)
- * Run docker:
-> Create master_app.log file inside root directory
-
-> docker-compose build
-
-> docker-compose up
- * To check the server, open `http://localhost:8000/`
-
-## License
-
-This project is licensed under the terms of the MIT license.
-
