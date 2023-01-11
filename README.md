@@ -1,6 +1,6 @@
 ![enter image description here](https://lh3.googleusercontent.com/cPYomSHND0D4kDuU1qHKcv8NsaC9E1BFEljalnVwB8DCxIYSj_Wozs39C9V55nAFHaodQX_nEzs)
 
-## DjangoUnboxed
+## Project Edu
 
 Production ready django based starter kit application.
 
@@ -29,15 +29,6 @@ With collaborative efforts from the CTO office, we have prepared this Django Boi
    setup these days. All the settings are yml driven and are
    configurable as per the business need. One can easily turn off/on
    configurations/services via this.
- - ***Smart Logging and EK*** :- We have integrated customized logger
-   interface, tracking DB Logs, Request Logs and App Logs with our own
-   hand tailored logger implementation that enables us to predict from
-   the logs if the application is going to face issues/problems.
-   Moreover we have integrated the EK stack in this that enables us to
-   harness great analytical and searching tool Kibana. Basically the
-   boilerplate is designed to transfer all the logs on Kibana, this is
-   happening via Filebeat. All the logs can then be queried and
-   analytics can be drawn from them.
  - ***System Monitoring*** :- We have included integration of MetricBeat and
    HeartBeat, they are efficient solutions to monitor system levels and
    vitals.
@@ -79,6 +70,10 @@ With collaborative efforts from the CTO office, we have prepared this Django Boi
 
  * Clone this repo
  * Install python3.10
+ * Install virtual env:
+> python3 -m venv venv
+ * Activate virtual env:
+> source venv/bin/activate
  * Intall dependencies:
 > pip install -r requirements.txt
  * Run the server:
