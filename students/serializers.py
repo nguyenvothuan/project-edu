@@ -7,4 +7,6 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ('id', 'name', 'school')
         
-        
+class StudentFollowCompanySerializer(serializers.Serializer):
+    company_id = serializers.IntegerField()
+    

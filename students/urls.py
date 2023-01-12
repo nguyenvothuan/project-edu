@@ -6,7 +6,7 @@ import logging
 
 # Django imports.
 from django.urls import path, include
-from students.views import StudentRegistrationAPIView, StudentLoginAPIView, StudentLogoutAPIView
+from students.views import StudentRegistrationAPIView, StudentLoginAPIView, StudentLogoutAPIView, StudentFollowCompany
 from rest_framework.routers import SimpleRouter
 from students.views import StudentViewSet
 
@@ -19,7 +19,8 @@ urlpatterns = [
     path('register/', StudentRegistrationAPIView.as_view(),
          name='student-register-api'),
     path('login/', StudentLoginAPIView.as_view(), name='student-login-api'),
-    path('logout/', StudentLogoutAPIView.as_view(), name='-student-logout-api'),
+    path('logout/', StudentLogoutAPIView.as_view(), name='student-logout-api'),
+    path('follow/', StudentFollowCompany.as_view(), name='student-follow-api'),
     # crud
     path('', include(crud_router.urls))
 ]
